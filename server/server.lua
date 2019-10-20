@@ -23,7 +23,7 @@ AddEventHandler("pRuncode:serverEvent", function(id, data)
     end
 end)
 
-RegisterCommand("runcod2", function(src)
+RegisterCommand("runcode2", function(src)
     if src == 0 or not IsPlayerAceAllowed(src, "runcode2") then return end
     TriggerClientEvent("pRuncode:clientEvent", src, 1)
 end)

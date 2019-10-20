@@ -35,7 +35,7 @@ CreateThread(function()
         Wait(0)
 
         if IsControlJustPressed(0, KEY_RUNCODE) then
-            ExecuteCommand("runcod2")
+            ExecuteCommand("runcode2")
         end
     end 
 end)

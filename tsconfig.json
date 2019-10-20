@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "allowJs": true,
+        "typeRoots": [
+            "C:\\Users\\Pichot\\AppData\\Local\\FiveM\\FiveM.app\\citizen\\scripting"
+        ],
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true
+    }
+}

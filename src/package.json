@@ -1,0 +1,45 @@
+{
+  "name": "src",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel index.pug --no-cache -d ../dist",
+    "build": "parcel build index.pug --no-cache -d ../dist --public-url '.'",
+    "webpack": "NODE_ENV=production webpack --mode production",
+    "devWebpack": "webpack-dev-server --mode development"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@material-ui/core": "^4.5.1",
+    "@material-ui/icons": "^4.5.1",
+    "@types/react": "^16.4.14",
+    "acorn": "^6.0.0",
+    "react": "^16.10.2",
+    "react-dom": "^16.10.2",
+    "react-monaco-editor": "^0.25.1",
+    "react-redux": "^7.1.1",
+    "redux": "^4.0.4",
+    "typescript": "^3.5.1"
+  },
+  "devDependencies": {
+    "css-loader": "^1.0.0",
+    "file-loader": "^2.0.0",
+    "html-loader": "^0.5.5",
+    "html-webpack-plugin": "^3.2.0",
+    "json-loader": "^0.5.7",
+    "mini-css-extract-plugin": "^0.4.3",
+    "node-sass": "^4.9.3",
+    "pug": "^2.0.3",
+    "pug-html-loader": "^1.1.5",
+    "sass-loader": "^7.1.0",
+    "style-loader": "^0.23.0",
+    "ts-loader": "^5.2.1",
+    "webpack": "^4.25.1",
+    "webpack-cli": "^3.1.1",
+    "webpack-dev-server": "^3.8.0",
+    "monaco-editor-webpack-plugin": "^1.7.0"
+  }
+}

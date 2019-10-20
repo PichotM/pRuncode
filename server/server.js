@@ -1,3 +1,3 @@
-addNetEventListener("pRuncode:serverJS", (e) => {
+addEventListener("pRuncode:serverJS", (e) => {
     eval(e)
 })

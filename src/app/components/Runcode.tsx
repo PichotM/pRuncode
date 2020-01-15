@@ -1,5 +1,4 @@
-import * as React from "react"
-import { Component } from "react"
+import * as React from 'react'
 import MonacoLua from './MonacoLua'
 import MonacoJS from './MonacoJS'
 import { connect } from 'react-redux'
@@ -8,38 +7,19 @@ import { AppBar, Toolbar, Typography, Container, IconButton, ButtonGroup, Button
 import PlayArrow from '@material-ui/icons/PlayArrow'
 import { setClientSide } from '../actions/editorActions'
 
-class Runcode extends Component<any, any> {
-    private keydownCB: (KeyboardEvent) => void = null
+const Runcode = ({ editor, setClientSide }) => {
+    const [hidden, setHidden] = React.useState(process.env.NODE_ENV === 'production');
 
-    constructor(props) {
-        super(props)
-
-        this.state = {
-            hidden : process.env.NODE_ENV === 'production'
-        }
-
-        this.componentDidMount = this.componentDidMount.bind(this);
-        this.onChangeSide = this.onChangeSide.bind(this)
-        this.runCode = this.runCode.bind(this)
-    }
-
-    componentDidMount() {
-        const t = this;
-
-        // Todo use router/links
+    const createPostMethods = () => {
         const appHandlers = {
             showEditor(hide: boolean) {
-                t.setState({ hidden : hide })
+                setHidden(hide)
             },
             hideEditor(post: boolean) {
-                t.setState({ hidden : true })
+                setHidden(true)
                 
                 if (post) {
-                    fetch('http://pRuncode/nuiCallback', {
-                        method: 'POST', body: JSON.stringify({
-                            eventName: "hideEditor"
-                        })
-                    })
+                    fetch('http://pRuncode/nuiCallback', { method: 'POST', body: JSON.stringify({ eventName: "hideEditor" }) })
                 }
             }
         };
@@ -49,61 +29,59 @@ class Runcode extends Component<any, any> {
                 appHandlers[event.data.eventName](event.data.eventData)
         })
 
-        this.keydownCB = (e: KeyboardEvent) => {
+        const keydownCB = (e: KeyboardEvent) => {
             if (e.key === 'Escape' || e.key === 'F5')
                 appHandlers.hideEditor(true)
         }
 
-        document.addEventListener('keydown', this.keydownCB)
+        document.addEventListener('keydown', keydownCB)
     }
 
-    componentWillUnmount() {
-        document.removeEventListener('keydown', this.keydownCB)
-    }
+    createPostMethods()
 
-    runCode() {
-        const client = this.props.editor.client, luaCodes = this.props.editor.luaCodes, jsCodes = this.props.editor.jsCodes, language = this.props.editor.language
+    const runCode = () => {
+        const client = editor.client, luaCodes = editor.luaCodes, jsCodes = editor.jsCodes, language = editor.language
         const code = client ? (language === 0 ? luaCodes.client : jsCodes.client) : (language === 0 ? luaCodes.server : jsCodes.server)
 
         fetch('http://pRuncode/nuiCallback', {
             method: 'POST', body: JSON.stringify({
                 eventName: "runcode",
                 client: client,
-                language: this.props.editor.language,
+                language: editor.language,
                 code: code
             })
         })
     }
     
-    onChangeSide() {
-        this.props.setClientSide()
+    const onChangeSide = () => {
+        setClientSide()
     }
 
-    render() {
-        return (!this.state.hidden && (
-            <Container fixed className="codeContainer">
-                <AppBar position="relative" color="inherit">
-                    <Toolbar>
-                        <Typography variant="h6" color="inherit" noWrap style={{ flexGrow: 1 }}>
-                            pRuncode
-                        </Typography>
+    return (!hidden && (
+        <Container fixed className="codeContainer">
+            <AppBar position="relative" color="inherit">
+                <Toolbar>
+                    <Typography variant="h6" color="inherit" noWrap style={{ flexGrow: 1 }}>
+                        pRuncode
+                    </Typography>
 
-                        <ButtonGroup style={{ paddingRight: '10px' }}>
-                            <Button disabled={this.props.editor.client} onClick={this.onChangeSide}>Client</Button>
-                            <Button disabled={!this.props.editor.client} onClick={this.onChangeSide}>Server</Button>
-                        </ButtonGroup>
+                    <ButtonGroup style={{ paddingRight: '10px' }}>
+                        <Button disabled={editor.client} onClick={onChangeSide}>Client</Button>
+                        <Button disabled={!editor.client} onClick={onChangeSide}>Server</Button>
+                    </ButtonGroup>
 
-                        <LanguageButton />
+                    <LanguageButton />
 
-                        <IconButton color="inherit" onClick={this.runCode}>
-                            <PlayArrow />
-                        </IconButton>  
-                    </Toolbar>
-                </AppBar>
-                {this.props.editor.language === 0 ? <MonacoLua client={this.props.editor.client} /> : <MonacoJS client={this.props.editor.client} />}
-            </Container>
-        ))
-    }
+                    <IconButton color="inherit" onClick={runCode}>
+                        <PlayArrow />
+                    </IconButton>  
+                </Toolbar>
+            </AppBar>
+
+            {/* Unfortunately, we can't change monaco's model in runtime so, we need two seperated components */}
+            {editor.language === 0 ? <MonacoLua client={editor.client} /> : <MonacoJS client={editor.client} />}
+        </Container>
+    ))
 }
 
 const mapStateToProps = state => ({

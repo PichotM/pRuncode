@@ -27,4 +27,4 @@ You can also edit the script if you use your own permission system.
 - C# maybe
 
 # Preview
-![preview](https://i.imgur.com/UN2hXPu.jpg)
+![preview](https://i.imgur.com/QPvLcNv.png)

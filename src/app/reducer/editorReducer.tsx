@@ -1,6 +1,18 @@
-import {SET_CLIENTSIDE, SET_LANGUAGE, SET_JS_SERVER_CODE, SET_JS_CLIENT_CODE, SET_LUA_SERVER_CODE, SET_LUA_CLIENT_CODE} from '../actions/editorActions'
+import {SET_CLIENTSIDE, SET_LANGUAGE, SET_JS_SERVER_CODE, SET_JS_CLIENT_CODE, SET_LUA_SERVER_CODE, SET_LUA_CLIENT_CODE, EditorActionTypes} from '../actions/editorActions'
 
-const defaultEditorState = {
+interface IEditorLanguageCodes {
+    client: string,
+    server: string
+}
+
+export interface EditorInitialState {
+    language: number,
+    client: boolean,
+    luaCodes: IEditorLanguageCodes,
+    jsCodes: IEditorLanguageCodes
+}
+
+const initialEditorState: EditorInitialState = {
     language : 0,
     client : true,
     luaCodes : {
@@ -19,7 +31,7 @@ console.log('Hello server')`
     }
 }
 
-const editorReducer = (state = defaultEditorState, action) => {
+const editorReducer = (state = initialEditorState, action: EditorActionTypes) => {
   switch (action.type) {
     case SET_CLIENTSIDE:
         return { ...state, client: !state.client };
